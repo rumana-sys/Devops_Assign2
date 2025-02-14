@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const db = require('./persistence');
+const db = require('./persistence'); // Make sure this file exists in your project
 const getItems = require('./routes/getItems');
 const addItem = require('./routes/addItem');
 const updateItem = require('./routes/updateItem');
@@ -14,13 +14,15 @@ app.post('/items', addItem);
 app.put('/items/:id', updateItem);
 app.delete('/items/:id', deleteItem);
 
-db.init().then(() => {
-    const port = process.env.PORT || 3000; // Use Cloud Run's port or default to 3000 locally
-    app.listen(port, () => console.log(`Listening on port ${port}`));
-}).catch((err) => {
-    console.error(err);
-    process.exit(1);
-});
+const port = process.env.PORT || 8080; // Cloud Run provides PORT, default to 8080
+db.init()
+    .then(() => {
+        app.listen(port, () => console.log(`Listening on port ${port}`));
+    })
+    .catch((err) => {
+        console.error(err);
+        process.exit(1);
+    });
 
 const gracefulShutdown = () => {
     db.teardown()

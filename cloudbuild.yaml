@@ -1,19 +1,19 @@
 steps:
   # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: 
+    args:
       - 'build'
       - '-t'
-      - 'us-central1-docker.pkg.dev/gcp-pipeline-450901/rumana-100989791/my-app:$COMMIT_SHA'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/rumana-100989791/my-app:$COMMIT_SHA'
       - '.'
 
   # Step 2: Push the image to Google Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: 
+    args:
       - 'push'
-      - 'us-central1-docker.pkg.dev/gcp-pipeline-450901/rumana-100989791/my-app:$COMMIT_SHA'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/rumana-100989791/my-app:$COMMIT_SHA'
 
-  # Step 3: Deploy to Cloud Run (optional)
+  # Step 3: Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -21,12 +21,14 @@ steps:
       - 'deploy'
       - 'my-app'
       - '--image'
-      - 'us-central1-docker.pkg.dev/gcp-pipeline-450901/rumana-100989791/my-app:$COMMIT_SHA'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/rumana-100989791/my-app:$COMMIT_SHA'
       - '--region'
-      - 'us-central1'
+      - '${_REGION}'
       - '--platform'
       - 'managed'
       - '--allow-unauthenticated'
+      - '--service'
+      - 'my-app'  # Explicitly define the service name
 
 # Substitutions for dynamic values
 substitutions:
@@ -36,5 +38,6 @@ substitutions:
 options:
   logging: CLOUD_LOGGING_ONLY
 
+# Specify the images being built
 images:
-  - 'us-central1-docker.pkg.dev/gcp-pipeline-450901/rumana-100989791/my-app:$COMMIT_SHA'
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/rumana-100989791/my-app:$COMMIT_SHA'

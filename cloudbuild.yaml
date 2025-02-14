@@ -13,13 +13,13 @@ steps:
       - 'push'
       - 'us-central1-docker.pkg.dev/$PROJECT_ID/rumana-100989791/my-app:$COMMIT_SHA'
 
-  # Step 3: Deploy to Cloud Run
+  # Step 3: Deploy to Cloud Run (FIXED: Removed --service)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
       - 'run'
       - 'deploy'
-      - 'my-app'
+      - 'my-app'  # ✅ Service name correctly specified here
       - '--image'
       - 'us-central1-docker.pkg.dev/$PROJECT_ID/rumana-100989791/my-app:$COMMIT_SHA'
       - '--region'
@@ -27,8 +27,6 @@ steps:
       - '--platform'
       - 'managed'
       - '--allow-unauthenticated'
-      - '--service'
-      - 'my-app'  # Explicitly define the service name
 
 # Substitutions for dynamic values
 substitutions:

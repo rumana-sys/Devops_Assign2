@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const db = require('./persistence'); // Make sure this file exists in your project
+const db = require('./persistence'); // Make sure this file exists
 const getItems = require('./routes/getItems');
 const addItem = require('./routes/addItem');
 const updateItem = require('./routes/updateItem');
@@ -14,13 +14,14 @@ app.post('/items', addItem);
 app.put('/items/:id', updateItem);
 app.delete('/items/:id', deleteItem);
 
-const port = process.env.PORT || 8080; // Cloud Run provides PORT, default to 8080
+const port = process.env.PORT || 8080; // Cloud Run expects port 8080
+
 db.init()
     .then(() => {
         app.listen(port, () => console.log(`Listening on port ${port}`));
     })
     .catch((err) => {
-        console.error(err);
+        console.error('Database connection failed:', err);
         process.exit(1);
     });
 
@@ -32,4 +33,4 @@ const gracefulShutdown = () => {
 
 process.on('SIGINT', gracefulShutdown);
 process.on('SIGTERM', gracefulShutdown);
-process.on('SIGUSR2', gracefulShutdown); // Sent by nodemon
+process.on('SIGUSR2', gracefulShutdown);

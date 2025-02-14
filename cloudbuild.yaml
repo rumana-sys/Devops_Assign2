@@ -4,4 +4,4 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/firstname-studentid/my-app:$COMMIT_SHA']
 options:
-  logging: 'REGIONAL_USER_OWNED_BUCKET'
+  logging: 'CLOUD_LOGGING_ONLY'

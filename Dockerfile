@@ -1,20 +1,20 @@
-# Use the official Node.js image as a base (LTS version)
+# Use official Node.js LTS image
 FROM node:14
 
-# Create and set the working directory
+# Set the working directory
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json files
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install app dependencies
+# Install dependencies
 RUN npm install
 
-# Copy the rest of your application code
+# Copy the rest of the application files
 COPY . .
 
-# Expose port 8080 (Cloud Run default)
+# Expose port 8080 for Cloud Run
 EXPOSE 8080
 
 # Start the application
-CMD [ "node", "index.js" ]
+CMD ["node", "index.js"]

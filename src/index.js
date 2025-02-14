@@ -15,7 +15,8 @@ app.put('/items/:id', updateItem);
 app.delete('/items/:id', deleteItem);
 
 db.init().then(() => {
-    app.listen(3000, () => console.log('Listening on port 3000'));
+    const port = process.env.PORT || 3000; // Use Cloud Run's port or default to 3000 locally
+    app.listen(port, () => console.log(`Listening on port ${port}`));
 }).catch((err) => {
     console.error(err);
     process.exit(1);
